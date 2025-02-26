@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang=ru dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="styles.css">
+    <title></title>
+  </head>
+  <body>
+    <header>
+      <h1>Магазин</h1>
+    </header>
+    <section>
+      
+    </section>
+    <script>
+      var requestURL='http://localhost:3000/goods';
+      var request=new XMLHttpRequest();
+      request.open('GET',requestURL);
+      request.responseType='json';
+      request.send();
+      request.onload=function(){
+        var resp=request.response;
+        sectionwriting(resp);
+      }
+      function sectionwriting(resp){
+        var header=document.querySelector('section');
+        var all=document.createElement('div');
+        all.className='allclass';
+        for (var i=0;i<resp.length;i++){
+          var card=document.createElement('div');
+          card.className='cards';
+          var name=document.createElement('h3');
+          name.className='goodname';
+          name.textContent=resp[i].name;
+          var cost=document.createElement('p');
+          cost.textContent="Стоимость: "+resp[i].cost+" гривен";
+          var descp=document.createElement('p');
+          descp.textContent=resp[i].description;
+          var cats=document.createElement('p');
+          stringcats="Категории: ";
+          for (var j=0;j<resp[i].cats.length;j++){
+            stringcats+=resp[i].cats[j];
+            stringcats+=" ";
+          }
+          cats.textContent=stringcats;
+          card.appendChild(name);
+          card.appendChild(cost);
+          card.appendChild(descp);
+          card.appendChild(cats);
+          all.appendChild(card);
+          header.appendChild(all);
+        }
+      }
+    </script>
+  </body>
+</html>

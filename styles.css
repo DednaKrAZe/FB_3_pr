@@ -1,0 +1,15 @@
+.cards{
+  border-style: solid;
+  border-color: red;
+  border-width: 2px;
+  width: 20%;
+  margin: 5%;
+  padding: 2%;
+}
+
+.allclass{
+    display: flex;
+    flex-direction: row;
+    max-width: 100%;
+    flex-wrap: wrap;
+}

@@ -1,0 +1,74 @@
+openapi: 3.0.3
+info:
+  title: Swagger Petstore - OpenAPI 3.0
+  version: 1.0.11
+servers:
+  - url: http://localhost:3000
+paths:
+  /admin:
+    post:
+      summary: Создать новую карточку товара
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                cost:
+                  type: string
+                description:
+                  type: string 
+                cats:
+                  items:
+                    type: string
+                  type: array 
+      responses:
+        '201':
+          description: Задача создана
+
+  /admin/{id}:  
+    put:
+      summary: Обновить карточку товара по ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID товара
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                cost:
+                  type: string
+                description:
+                  type: string
+                cats:
+                  items:
+                    type: string
+                  type: array
+      responses:
+        '200':
+            description: Задача обновлена
+  
+    delete:
+      summary: Удалить карточку товара по ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID товара
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Задача удалена
