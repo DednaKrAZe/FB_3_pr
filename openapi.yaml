@@ -3,9 +3,9 @@ info:
   title: Swagger Petstore - OpenAPI 3.0
   version: 1.0.11
 servers:
-  - url: http://localhost:3000
+  - url: http://localhost:8080
 paths:
-  /admin:
+  /:
     post:
       summary: Создать новую карточку товара
       requestBody:
@@ -29,7 +29,7 @@ paths:
         '201':
           description: Задача создана
 
-  /admin/{id}:  
+  /{id}:  
     put:
       summary: Обновить карточку товара по ID
       parameters:
