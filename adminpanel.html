@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang=ru dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="styles.css">
+    <title></title>
+  </head>
+  <body>
+    <main>
+        <div class="forma">
+            <form action="">
+                <input type="text" id="newname" placeholder="name"><br>
+                <input type="text" id="newcost" placeholder="cost"><br>
+                <input type="text" id="newdescription" placeholder="description"><br>
+                <input type="text" id="newcats" placeholder="cats"><br>
+              </form>
+            <button onclick=newModule()>Создать</button>
+        </div>
+        <div class="forma">
+            <form action="">
+                <input type="text" id="redid" placeholder="ID"><br>
+                <input type="text" id="redname" placeholder="name"><br>
+                <input type="text" id="redcost" placeholder="cost"><br>
+                <input type="text" id="reddescription" placeholder="description"><br>
+                <input type="text" id="redcats" placeholder="cats"><br>
+              </form>
+            <button onclick=redModule()>Изменить</button>
+        </div>
+        <div class="forma">
+            <form action="">
+                <input type="text" id="delid" placeholder="ID"><br>
+              </form>
+            <button onclick=delModule()>Удалить</button>
+        </div>
+    </main>
+    <script>
+        async function newModule(){
+            nameMod=document.getElementById('newname').value;
+            costMod=document.getElementById('newcost').value;
+            descMod=document.getElementById('newdescription').value;
+            catMod=document.getElementById('newcats').value;
+            catMod=catMod.split(' ');
+            console.log(nameMod);
+            const body={
+                name: nameMod,
+                cost:costMod,
+                description:descMod,
+                cats:catMod
+            }
+            const jsonBody = JSON.stringify(body);
+
+            const response = await fetch('/', {
+            method: 'POST',
+            headers: {
+                        'Content-Type': 'application/json'
+            },
+                    body: jsonBody
+            });
+        }    
+        async function redModule(){
+            idMod=document.getElementById('redid').value;
+            nameMod=document.getElementById('redname').value;
+            costMod=document.getElementById('redcost').value;
+            descMod=document.getElementById('reddescription').value;
+            catMod=document.getElementById('redcats').value;
+            catMod=catMod.split(' ');
+            const address='/'+idMod;
+            const body={
+                name: nameMod,
+                cost:costMod,
+                description:descMod,
+                cats:catMod
+            }
+            const jsonBody = JSON.stringify(body);
+
+            const response = await fetch(address, {
+            method: 'PUT',
+            headers: {
+                        'Content-Type': 'application/json'
+            },
+                    body: jsonBody
+            });
+        }    
+        async function delModule(){
+            nameMod=document.getElementById('delid').value;
+            console.log(nameMod);
+            const address="/"+nameMod;
+            const response = await fetch(address, {
+            method: 'DELETE',
+            headers: {
+                        'Content-Type': 'application/json'
+            }
+            });
+        }    
+    </script>
+  </body>
+</html>

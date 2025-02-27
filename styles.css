@@ -13,3 +13,11 @@
     max-width: 100%;
     flex-wrap: wrap;
 }
+
+.money{
+  color:green;
+}
+
+.forma{
+  margin: 6%;
+}

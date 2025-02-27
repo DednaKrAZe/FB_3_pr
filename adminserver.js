@@ -4,9 +4,7 @@ const path = require('path');
 
 const app = express();
 const PORT = 8080;
-
 let goods=[];
-
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '')));
 
@@ -35,6 +33,10 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, '', 'adminpanel.html'));
+});
+
 app.delete('/:id', (req, res) => {
     goods=JSON.parse(fs.readFileSync(path.join(__dirname, '', 'db.json'),'utf-8'));
     const goodId = parseInt(req.params.id);
@@ -53,6 +55,7 @@ app.delete('/:id', (req, res) => {
 app.post('/', (req, res) => {
     const { name, cost,description,cats } = req.body;
     goods=JSON.parse(fs.readFileSync(path.join(__dirname, '', 'db.json'),'utf-8'));
+    console.log(name);
     const newGood = {
         id: goods.length + 1,
         name:name,
@@ -85,6 +88,7 @@ app.put('/:id', (req, res) => {
 app.use((req, res) => {
     res.status(404).sendFile(path.join(__dirname, '', '404.html'));
 });
+
 
 app.listen(PORT, () => {
     console.log(`Сервер запущен на http://localhost:${PORT}`);
