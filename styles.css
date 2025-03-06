@@ -21,3 +21,17 @@
 .forma{
   margin: 6%;
 }
+
+.mess{
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+#chat{
+  border-style: solid;
+  border-color: red;
+  border-width: 2px;
+  margin: 3%;
+  width: 12%;
+  padding: 2%;
+}

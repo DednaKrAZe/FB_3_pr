@@ -13,16 +13,42 @@
       
     </section>
     <script>
-      var requestURL='http://localhost:3000/goods';
-      var request=new XMLHttpRequest();
-      request.open('GET',requestURL);
-      request.responseType='json';
-      request.send();
-      request.onload=function(){
-        var resp=request.response;
-        sectionwriting(resp);
+      // GraphQL-запрос
+    const query = `
+      query GetAllItems {
+        items {
+          name
+          cost
+          description
+          cats
+        }
       }
+    `;
+
+    // URL вашего GraphQL-сервера
+    const graphqlEndpoint = 'http://localhost:3000/goods';
+
+    const jsn=[{}];
+
+    // Отправка запроса
+    fetch(graphqlEndpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        query: query,
+      }),
+    })
+      .then(response => response.json()) 
+      .then(data => {
+        console.log(data.data);
+        sectionwriting(data.data.items);
+      })
+
       function sectionwriting(resp){
+        console.log(resp.length);
         var header=document.querySelector('section');
         var all=document.createElement('div');
         all.className='allclass';
@@ -53,5 +79,36 @@
         }
       }
     </script>
+    <footer>
+      <h1>Чат с поддержкой</h1>
+    <input type="text" id="message" placeholder="Введите сообщение">
+    <button onclick="sendMessage()">Отправить</button>
+    <div id="chat"></div>
+
+    <script>
+        const chat = document.getElementById('chat');
+        const messageInput = document.getElementById('message');
+
+        const ws = new WebSocket('ws://localhost:8081');
+
+        ws.onmessage = async (event) => {
+            const message = document.createElement('div');
+            message.className="mess";
+            message.textContent ="Администратор: "+await event.data.text();
+            chat.appendChild(message);
+        };
+
+        function sendMessage() {
+          const chat = document.getElementById('chat');
+          const message = messageInput.value;
+          const mess = document.createElement('div');
+          mess.className="mess";
+          mess.textContent = "Вы: "+message;
+          chat.appendChild(mess);
+          ws.send(message);
+          messageInput.value = '';
+        }
+    </script>
+    </footer>
   </body>
 </html>

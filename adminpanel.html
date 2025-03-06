@@ -93,5 +93,36 @@
             });
         }    
     </script>
+    <footer>
+    <h1>Чат с пользователями</h1>
+    <input type="text" id="message" placeholder="Введите сообщение">
+    <button onclick="sendMessage()">Отправить</button>
+    <div id="chat"></div>
+
+    <script>
+        const chat = document.getElementById('chat');
+        const messageInput = document.getElementById('message');
+
+        const ws = new WebSocket('ws://localhost:8081');
+
+        ws.onmessage = async (event) => {
+            const message = document.createElement('div');
+            message.className="mess";
+            message.textContent = "Клиент: "+await event.data.text();
+            chat.appendChild(message);
+        };
+
+        function sendMessage() {
+          const chat = document.getElementById('chat');
+          const message = messageInput.value;
+          const mess = document.createElement('div');
+          mess.className="mess";
+          mess.textContent = "Вы: "+message;
+          chat.appendChild(mess);
+          ws.send(message);
+          messageInput.value = '';
+        }
+    </script>
+    </footer>
   </body>
 </html>
