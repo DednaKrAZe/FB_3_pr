@@ -96,10 +96,17 @@
     <footer>
     <h1>Чат с пользователями</h1>
     <input type="text" id="message" placeholder="Введите сообщение">
-    <button onclick="sendMessage()">Отправить</button>
+    <button onclick="sendMessage()" id="enter-btn">Отправить</button>
     <div id="chat"></div>
 
     <script>
+        const enterBtn = document.getElementById("enter-btn");
+
+        window.addEventListener("keypress", ({key}) => {
+          if (key == "Enter")
+            enterBtn.click();
+        });
+
         const chat = document.getElementById('chat');
         const messageInput = document.getElementById('message');
 
@@ -108,7 +115,10 @@
         ws.onmessage = async (event) => {
             const message = document.createElement('div');
             message.className="mess";
-            message.textContent = "Клиент: "+await event.data.text();
+            let curDate=new Date();
+            let curHour=curDate.getHours();
+            let curMin=curDate.getMinutes();
+            message.textContent ="Клиент: "+await event.data.text()+` ${curHour}:${curMin}`;
             chat.appendChild(message);
         };
 
@@ -117,7 +127,10 @@
           const message = messageInput.value;
           const mess = document.createElement('div');
           mess.className="mess";
-          mess.textContent = "Вы: "+message;
+          let curDate=new Date();
+          let curHour=curDate.getHours();
+          let curMin=curDate.getMinutes();
+          mess.textContent = "Вы: "+message+` ${curHour}:${curMin}`;
           chat.appendChild(mess);
           ws.send(message);
           messageInput.value = '';
