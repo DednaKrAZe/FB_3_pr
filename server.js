@@ -18,12 +18,42 @@ const fs = require('fs');
 let items=JSON.parse(fs.readFileSync(path.join(__dirname, '', 'db.json'), 'utf-8'));
 const server = http.createServer(app);
 const ws = new WebSocket.Server({ server });
-const ItemType = new GraphQLObjectType({
+const ItemTypeFull = new GraphQLObjectType({
     name: 'Item',
     fields: {
       name: { type: GraphQLString },
       cost: { type: GraphQLString },
       description: { type: GraphQLString },
+      cats: { type: new GraphQLList(GraphQLString) },
+    },
+  });
+
+  const RootQueryTypefull = new GraphQLObjectType({
+    name: 'Query',
+    fields: {
+      items: {
+        type: new GraphQLList(ItemTypeFull),
+        resolve: () => {
+          return items.map(item => ({
+            name: item.name,
+            cost: item.cost,
+            description: item.description,
+            cats: item.cats,
+          }));
+        },
+      },
+    },
+  });
+
+  const schemafull = new GraphQLSchema({
+    query: RootQueryTypefull,
+  });
+
+  const ItemType = new GraphQLObjectType({
+    name: 'Item',
+    fields: {
+      name: { type: GraphQLString },
+      cost: { type: GraphQLString },
       cats: { type: new GraphQLList(GraphQLString) },
     },
   });
@@ -37,7 +67,6 @@ const ItemType = new GraphQLObjectType({
           return items.map(item => ({
             name: item.name,
             cost: item.cost,
-            description: item.description,
             cats: item.cats,
           }));
         },
@@ -48,13 +77,21 @@ const ItemType = new GraphQLObjectType({
   const schema = new GraphQLSchema({
     query: RootQueryType,
   });
-
+  
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '', 'index.html'));
     items=JSON.parse(fs.readFileSync(path.join(__dirname, '', 'db.json'), 'utf-8'));
 });
 
 app.use(
+    '/goods/full',
+    graphqlHTTP({
+      schema: schemafull,
+      graphiql: true, 
+    }),
+  );
+
+  app.use(
     '/goods',
     graphqlHTTP({
       schema: schema,
